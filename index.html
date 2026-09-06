@@ -534,14 +534,15 @@
 
   function onAnswerClick(e){
     if(!state.accepting || state.timeLeft <= 0) return;
-    const val = parseInt(e.currentTarget.getAttribute("data-val"),10);
+    const clickedBtn = e.currentTarget; // capture now: e.currentTarget becomes null once the event finishes dispatching
+    const val = parseInt(clickedBtn.getAttribute("data-val"),10);
     const correctVal = state.currentProblem.c;
     if(val === correctVal){
       state.accepting = false;
       state.correct++;
       document.getElementById("correctCount").textContent = state.correct;
       playCorrectSound();
-      e.currentTarget.classList.add("correct-flash");
+      clickedBtn.classList.add("correct-flash");
       setTimeout(()=>{
         if(state.timeLeft > 0) nextProblem();
       }, 220);
@@ -550,12 +551,12 @@
       state.wrong++;
       document.getElementById("wrongCount").textContent = state.wrong;
       playWrongSound();
-      e.currentTarget.classList.add("wrong-flash");
+      clickedBtn.classList.add("wrong-flash");
       const correctBtn = document.querySelector('.ans-btn[data-val="'+correctVal+'"]');
       if(correctBtn) correctBtn.classList.add("correct-flash");
       setTimeout(()=>{
         if(correctBtn) correctBtn.classList.remove("correct-flash");
-        e.currentTarget.classList.remove("wrong-flash");
+        clickedBtn.classList.remove("wrong-flash");
         if(state.timeLeft > 0) nextProblem();
       }, 2000);
     }
